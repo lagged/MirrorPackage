@@ -1,0 +1,31 @@
+#!/usr/bin/env php
+<?php
+/**
+ * Script emits the following exit codes:
+ *  - 0: all in the clear
+ *  - 1: Wrong options.
+ *  - 2: from -h (help)
+ *  - 3: Runtime error.
+ *
+ * @category Management
+ * @package  MirrorPackage
+ * @author   Till Klampaeckel <till@lagged.biz>
+ * @license  http://www.opensource.org/licenses/bsd-license.php The New BSD License
+ * @version  Release: @package_version@
+ * @link     http://www.lagged.biz/
+ */
+
+$config   = array();
+$config["p:"]  = "The URL to your package";
+$config["c::"] = "Location of the pear command on your system"; // -c, optional
+$config["h::"] = "Display help message"; // -h, optional
+
+//var_dump(array_keys
+$opts = getopt(implode('', array_keys($config)));
+
+set_include_path(dirname(__DIR__) . '/src:' . get_include_path());
+
+require_once 'MirrorPackage.php';
+
+$p = new \Lagged\PEAR\MirrorPackage($opts, $_SERVER, $config);
+$p->setUp()->clonePackage();
