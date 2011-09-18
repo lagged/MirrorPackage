@@ -1,0 +1,179 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<package packagerversion="1.6.2" version="2.0" xmlns="http://pear.php.net/dtd/package-2.0" xmlns:tasks="http://pear.php.net/dtd/tasks-1.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://pear.php.net/dtd/tasks-1.0
+http://pear.php.net/dtd/tasks-1.0.xsd
+http://pear.php.net/dtd/package-2.0
+http://pear.php.net/dtd/package-2.0.xsd">
+ <name>Services_ProjectHoneyPot</name>
+ <channel>pear.php.net</channel>
+ <summary>A package to interface the http:bl API of ProjectHoneyPot.org.</summary>
+ <description>This package is used to determine if an IP or hostname are a) a search engine, b) suspicious, c) the ip of a harvester or/and d) of a comment spammer.</description>
+ <lead>
+  <name>Till Klampaeckel</name>
+  <user>till</user>
+  <email>till@php.net</email>
+  <active>yes</active>
+ </lead>
+ <date>2011-01-13</date>
+ <time>10:50:00</time>
+ <version>
+  <release>0.5.3</release>
+  <api>0.5.2</api>
+ </version>
+ <stability>
+  <release>alpha</release>
+  <api>alpha</api>
+ </stability>
+ <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+ <notes>
+* bugfix: Net_CheckIP2 changed API so we had to update
+* bump up Net_CheckIP2 version requirement
+ </notes>
+ <contents>
+  <dir name="/">
+   <dir name="Services">
+    <dir name="ProjectHoneyPot">
+     <dir name="Response">
+      <file name="Exception.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="Result.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+      <file name="ResultSet.php" role="php">
+       <tasks:replace from="@package_version@" to="version" type="package-info" />
+      </file>
+     </dir>
+     <file name="Exception.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+     <file name="Response.php" role="php">
+      <tasks:replace from="@package_version@" to="version" type="package-info" />
+     </file>
+    </dir>
+    <file name="ProjectHoneyPot.php" role="php">
+     <tasks:replace from="@package_version@" to="version" type="package-info" />
+    </file>
+   </dir>
+   <dir name="examples" baseinstalldir="Services_ProjectHoneyPot">
+    <file name="config.php-dist" role="doc" />
+    <file name="example.php" role="doc" />
+    <file name="example-multiple.php" role="doc" />
+    <file name="example-obj.php" role="doc" />
+    <file name="example-resolver.php" role="doc" />
+   </dir>
+   <dir name="tests" baseinstalldir="Services_ProjectHoneyPot">
+    <file name="config.php-dist" role="test" />
+    <file name="test-harvester.phpt" role="test" />
+    <file name="test-valid.phpt" role="test" />
+    <file name="test-valid-host.phpt" role="test" />
+   </dir>
+  </dir> <!-- / -->
+ </contents>
+ <dependencies>
+  <required>
+   <php>
+    <min>5.2.0</min>
+   </php>
+   <pearinstaller>
+    <min>1.4.0b1</min>
+   </pearinstaller>
+   <package>
+    <name>Net_CheckIP2</name>
+    <channel>pear.php.net</channel>
+    <min>1.0.0RC3</min>
+   </package>
+   <package>
+    <name>Net_DNS</name>
+    <channel>pear.php.net</channel>
+    <min>1.0.0</min>
+   </package>
+   <extension>
+    <name>spl</name>
+   </extension>
+  </required>
+ </dependencies>
+ <phprelease />
+ <changelog>
+  <release>
+   <version>
+    <release>0.5.3</release>
+    <api>0.5.2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2010-01-13</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+   <notes>
+* bugfix: Net_CheckIP2 changed API so we had to update
+* bump up Net_CheckIP2 version requirement
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.5.2</release>
+    <api>0.5.2</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-04-12</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+   <notes>
+* fixed format "array" and "string" (bugs introduced in 0.5.0)
+* removed classes for "array" and "string"
+* migrated leftover methods into Services_ProjectHoneyPot_Response_Result
+* added an example to show usage of custom Net_DNS_Resolver
+* cleaned up standard example file
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.5.1</release>
+    <api>0.5.1</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-04-11</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+   <notes>
+* small bugfixes
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.5.0</release>
+    <api>0.5.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-02-27</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+   <notes>
+* more comments
+* introduced new response type ("object")
+* documented __set() and __get() with @property
+   </notes>
+  </release>
+  <release>
+   <version>
+    <release>0.2.0</release>
+    <api>0.2.0</api>
+   </version>
+   <stability>
+    <release>alpha</release>
+    <api>alpha</api>
+   </stability>
+   <date>2008-02-07</date>
+   <license uri="http://www.opensource.org/licenses/bsd-license.php">The BSD License</license>
+   <notes>Created a package.xml, for the rest see SVN.</notes>
+  </release>
+ </changelog>
+</package>
+
