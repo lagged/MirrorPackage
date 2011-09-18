@@ -1,15 +1,13 @@
 <?php
 namespace Lagged\PEAR\MirrorPackage;
 
-class PackageXML
+/**
+ * @desc Import abstract class
+ */
+use Lagged\PEAR\MirrorPackage\XML as XML;
+
+class PackageXML extends XML
 {
-    protected $xml;
-
-    public function __construct($xml)
-    {
-        $this->xml = simplexml_load_string($xml);
-    }
-
     public function getChannel()
     {
         return (string) $this->xml->channel;
