@@ -20,7 +20,7 @@ class PackageXMLTestCase extends \PHPUnit_Framework_TestCase
 
     public function testGetDependencies()
     {
-        $xml = file_get_contents(__DIR__ . '/fixtures/rediska-package.xml');
+        $xml = file_get_contents(__DIR__ . '/fixtures/request2-package.xml');
 
         $p = new PackageXML($xml);
         $d = $p->getDependencies();
