@@ -17,4 +17,14 @@ class PackageXMLTestCase extends \PHPUnit_Framework_TestCase
         $this->assertInstanceOf('Lagged\PEAR\MirrorPackage\PackageXML', $p->setChannel('easybib.github.com/pear'));
         $this->assertEquals('easybib.github.com/pear', $p->getChannel());
     }
+
+    public function testGetDependencies()
+    {
+        $xml = file_get_contents(__DIR__ . '/fixtures/rediska-package.xml');
+
+        $p = new PackageXML($xml);
+        $d = $p->getDependencies();
+
+        $this->assertInternalType('array', $d);
+    }
 }
