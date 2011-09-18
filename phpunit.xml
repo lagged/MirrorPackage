@@ -1,0 +1,6 @@
+<phpunit colors="true" verbose="true">
+  <testsuite>
+    <file>./tests/PackageXMLTestCase.php</file>
+    <file>./tests/PirumXMLTestCase.php</file>
+  </testsuite>
+</phpunit>
