@@ -18,13 +18,29 @@ class PackageXMLTestCase extends \PHPUnit_Framework_TestCase
         $this->assertEquals('easybib.github.com/pear', $p->getChannel());
     }
 
-    public function testGetDependencies()
+    public static function xmlProvider()
     {
-        $xml = file_get_contents(__DIR__ . '/fixtures/request2-package.xml');
+        return array(
+            array('request2-package.xml'),
+            array('honey-package.xml'),
+        );
+    }
+
+    /**
+     * @dataProvider xmlProvider
+     */
+    public function testGetDependencies($xml)
+    {
+        $xml = file_get_contents(__DIR__ . '/fixtures/' . $xml);
 
         $p = new PackageXML($xml);
         $d = $p->getDependencies();
 
         $this->assertInternalType('array', $d);
+        $this->assertArrayHasKey('required', $d);
+        $this->assertArrayHasKey('optional', $d);
+
+        $this->assertInternalType('array', $d['required']);
+        $this->assertInternalType('array', $d['optional']);
     }
 }
