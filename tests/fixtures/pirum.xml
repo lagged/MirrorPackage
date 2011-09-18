@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<server>
+    <name>easybib.github.com/pear</name>
+    <summary>easybib's PEAR Channel Server</summary>
+    <alias>easybib</alias>
+    <url>http://easybib.github.com/pear</url>
+</server>
