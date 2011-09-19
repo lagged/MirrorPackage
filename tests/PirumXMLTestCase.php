@@ -1,10 +1,4 @@
 <?php
-require_once 'PHPUnit/Autoload.php';
-set_include_path(dirname(__DIR__) . '/src:' . get_include_path());
-
-require_once 'MirrorPackage/XML.php';
-require_once 'MirrorPackage/PirumXML.php';
-
 use Lagged\PEAR\MirrorPackage\PirumXML as PirumXML;
 
 class PirumXMLTestCase extends \PHPUnit_Framework_TestCase
