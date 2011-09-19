@@ -108,22 +108,62 @@ class MirrorPackage
             exit(3);
         }
 
-        $packageDir  = substr($packageFile, 0, -7); // .tar.gz
+        if (file_exists("{$this->pirum}/{$packageFile}")) {
+            echo "Package seems to already exist in pirum's directory." . PHP_EOL;
+            exit(3);
+        }
+
+        $packageTar = substr($packageFile, 0, -3); // .gz
+        $tar        = `which tar`;
 
         cwd($tmpDir);
-        $cmd = "tar -zxvf $tmpFile"; // assuming 'tar' is in the path
+        $cmd = "{$tar} -zxf {$tmpFile}";
 
-        $cmd = "mv package.xml ./{$packageDir}";
+        $packageXML = new MirrorPackage\PackageXML("{$tmpDir}/package.xml");
 
-        cwd("./{$packageDir}"); // go into extracted dir
+        $pirum   = new MirrorPackage\PirumXML("{$this->pirum}/pirum.xml");
+        $channel = $pirum->getChannelUrl();
 
-        $cmd = "replace package.xml";
+        $packageXML->setChannel($channel);
 
-        $cmd = "pear package";
+        $deps = $packageXML->getDependencies();
 
-        $cmd = "cp $packageFile $pirum";
+        if (@file_put_contents("{$tmpDir}/package.xml", (string) $packageXML) === false) {
+            echo "Could not write package.xml.";
+            exit(3);
+        }
+
+        // replace package.xml in .tar
+        $cmd = "{$tar} -rvf {$packageTar} package.xml";
+        $cmd = "{$gzip} {$packageTar}";
+
+        rename($packageFile, "{$this->pirum}/{$packageFile}");
     }
 
+    /**
+     * Small autoloader!
+     *
+     * @param string $className The name of the class to load!
+     *
+     * @return boolean
+     * @see    spl_autoload_register()
+     */
+    public static function autoload($className)
+    {
+        if (substr($className, 0, 25) !== 'Lagged\PEAR\MirrorPackage') {
+            return false;
+        }
+
+        $file = substr($className, 12);
+        $file = str_replace('\\', '/', $file) . '.php';
+        return include $file;
+    }
+
+    /**
+     * Display help/usage when -h is given.
+     *
+     * @return void
+     */
     protected function checkHelp()
     {
         if (isset($this->opts['h'])) {
@@ -145,6 +185,12 @@ class MirrorPackage
         $this->package = $this->opts['p'];
     }
 
+    /**
+     * Find PEAR on the system. Maybe we refactor this to something
+     * better and less annoying.
+     *
+     * @return void
+     */
     protected function checkPear()
     {
         if (isset($this->opts['c'])) {
@@ -160,6 +206,14 @@ class MirrorPackage
         }
     }
 
+    /**
+     * Check the location of the pirum folder: must be readable, writable
+     * and contain a pirum.xml.
+     *
+     * @return void
+     * @uses   self::$server
+     * @uses   self::$pirum
+     */
     protected function checkPirum()
     {
         $path = end($this->server['argv']);
@@ -174,7 +228,11 @@ class MirrorPackage
             exit(3);
         }
         if (!is_readable($this->pirum) || !is_dir($this->pirum) || !is_writable($this->pirum)) {
-            echo "Could not read/write to Pirum: $this->pirum" . PHP_EOL;
+            echo "Could not read/write to Pirum: {$this->pirum}" . PHP_EOL;
+            exit(3);
+        }
+        if (!file_exists($this->pirum . '/pirum.xml')) {
+            echo "Could not find pirum.xml in {$this->pirum}." . PHP_EOL;
             exit(3);
         }
     }
