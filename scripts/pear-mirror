@@ -26,6 +26,7 @@ $opts = getopt(implode('', array_keys($config)));
 set_include_path(dirname(__DIR__) . '/src:' . get_include_path());
 
 require_once 'MirrorPackage.php';
+spl_autoload_register(array('Lagged\PEAR\MirrorPackage', 'autoload'));
 
 $p = new \Lagged\PEAR\MirrorPackage($opts, $_SERVER, $config);
-$p->setUp()->clonePackage();
+$p->setUp()->clonePackage()->showSummary();
