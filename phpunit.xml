@@ -1,4 +1,4 @@
-<phpunit colors="true" verbose="true">
+<phpunit colors="true" verbose="true" bootstrap="./tests/TestInit.php">
   <testsuite>
     <file>./tests/PackageXMLTestCase.php</file>
     <file>./tests/PirumXMLTestCase.php</file>
