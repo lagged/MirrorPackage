@@ -89,23 +89,26 @@ class MirrorPackage
     /**
      * Start cloning the package!
      *
-     * @return void
+     * @return $this
      */
     public function clonePackage()
     {
         $packageFile = basename($this->package);
         $tmpFile     = sys_get_temp_dir() . '/pear-mirror/' . $packageFile;
-        var_dump($this->package, $this->pearcmd, $tmpFile, $this->pirum); exit;
 
         $tmpDir = dirname($tmpFile);
-        if (!@mkdir($tmpDir)) {
-            echo "Could not create temporary directory: {$tmpDir}" . PHP_EOL;
-            exit(3);
+        if (!file_exists($tmpDir)) {
+            if (!mkdir($tmpDir)) {
+                echo "Could not create temporary directory: {$tmpDir}" . PHP_EOL;
+                exit(3);
+            }
         }
 
-        if (!file_put_contents($tmpFile, file_get_contents($this->package))) {
-            echo "Could not download package..." . PHP_EOL;
-            exit(3);
+        if (!file_exists($tmpFile)) {
+            if (!file_put_contents($tmpFile, file_get_contents($this->package))) {
+                echo "Could not download package..." . PHP_EOL;
+                exit(3);
+            }
         }
 
         if (file_exists("{$this->pirum}/{$packageFile}")) {
@@ -113,11 +116,12 @@ class MirrorPackage
             exit(3);
         }
 
-        $packageTar = substr($packageFile, 0, -3); // .gz
-        $tar        = `which tar`;
+        $tar = "tar"; // FIXME: maybe 'detect' this which which or whereis?
 
-        cwd($tmpDir);
-        $cmd = "{$tar} -zxf {$tmpFile}";
+        \chdir($tmpDir);
+
+        $cmd = "{$tar} zxf {$tmpFile}";
+        exec($cmd, $output, $ret);
 
         $packageXML = new MirrorPackage\PackageXML("{$tmpDir}/package.xml");
 
@@ -133,11 +137,16 @@ class MirrorPackage
             exit(3);
         }
 
+        $gzip = 'gzip'; // FIXME: detect this?
+
         // replace package.xml in .tar
-        $cmd = "{$tar} -rvf {$packageTar} package.xml";
-        $cmd = "{$gzip} {$packageTar}";
+        $cmd = "{$tar} -cf {$packageFile} {$packageFile}";
+        $cmd = "{$gzip} {$packageFile}";
+        exec($cmd, $output, $ret);
 
         rename($packageFile, "{$this->pirum}/{$packageFile}");
+
+        return $this;
     }
 
     /**
