@@ -151,7 +151,9 @@ class MirrorPackage
         $release = new \Lagged\PEAR\MirrorPackage\Release($this->package, $tmpDir);
         $release->run();
 
-
+        /**
+         * @desc Last but not least: move it to pirum's directory!
+         */
         \chdir($tmpDir);
         rename($packageFile, "{$this->pirum}/{$packageFile}");
 
