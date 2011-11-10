@@ -54,6 +54,12 @@ class MirrorPackage
     protected $server;
 
     /**
+     * @var array $summary Just a store to hold some data.
+     * @see self::showSummary();
+     */
+    protected $summary;
+
+    /**
      * __construct()
      *
      * @param array $opts
@@ -67,6 +73,21 @@ class MirrorPackage
         $this->opts   = $opts;
         $this->server = $server;
         $this->config = $config;
+    }
+
+    public function showSummary()
+    {
+        echo "You successfully cloned {$this->package} to your own channel." . PHP_EOL;
+        echo "Steps to do: " . PHP_EOL;
+        echo " * commit changes in {$this->pirum}" . PHP_EOL;
+        echo " * push the (correct) branch" . PHP_EOL;
+
+        if (count($this->summary['deps']) > 0) {
+            echo PHP_EOL;
+            echo "Possible gotchas: " . PHP_EOL;
+            echo " * this package has dependencies on other channels, consider moving them too";
+            var_dump($this->summary['deps']);
+        }
     }
 
     /**
@@ -114,7 +135,8 @@ class MirrorPackage
 
         $packageXML->setChannel($channel);
 
-        $deps = $packageXML->getDependencies();
+        $this->summary         = array();
+        $this->summary['deps'] = $packageXML->getDependencies();
 
         /**
          * @desc Overwrite extracted package.xml.
