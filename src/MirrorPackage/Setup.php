@@ -80,7 +80,9 @@ class Setup
 
         $cmd = "{$tar} zxf {$tmpFile}";
         exec($cmd, $output, $ret);
-        var_dump($cmd, $output, $ret); exit;
+        if ($ret != 0) {
+            throw new \RuntimeException("Could not untar: {$output}");
+        }
 
         return $this;
     }
