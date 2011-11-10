@@ -34,7 +34,7 @@ class Release
     {
         \chdir($this->tmpDir);
 
-        unlink($this->file);
+        unlink(basename($this->file));
         $newName = substr(basename($this->file), 0, -4);
 
         $cmd = "tar -czf {$newName}.tgz {$newName} package.xml";
