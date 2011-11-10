@@ -77,7 +77,7 @@ class MirrorPackage
 
     public function showSummary()
     {
-        echo "You successfully cloned {$this->package} to your own channel." . PHP_EOL;
+        echo "You successfully cloned {$this->package} to your own channel." . PHP_EOL . PHP_EOL;
         echo "Steps to do: " . PHP_EOL;
         echo " * commit changes in {$this->pirum}" . PHP_EOL;
         echo " * push the (correct) branch" . PHP_EOL;
@@ -85,10 +85,42 @@ class MirrorPackage
         if (count($this->summary['deps']) > 0) {
             echo PHP_EOL;
             echo "Possible gotchas: " . PHP_EOL;
-            echo " * this package has dependencies on other channels, consider moving them too";
-            var_dump($this->summary['deps']);
+            echo " * this package has dependencies" . PHP_EOL;
+
+            if (isset($this->summary['deps']['required'])) {
+                $this->displayDep($this->summary['deps']['required'], 'required');
+            }
+            if (isset($this->summary['deps']['optional'])) {
+                $this->displayDep($this->summary['deps']['optional'], 'optional');
+            }
         }
     }
+
+    /**
+     * Convenience method for {@link self::showSummary()}.
+     *
+     * @param array  $deps
+     * @param string $type
+     *
+     * @return void
+     */
+    protected function displayDep(array $deps = null, $type)
+    {
+        if ($deps === null) {
+            return;
+        }
+        if (count($deps) == 0) {
+            return;
+        }
+        foreach ($deps as $_d) {
+            if (!isset($_d->package)) {
+                continue;
+            }
+            echo " * {$type} package {$_d->package->name}, channel: {$_d->package->channel}" . PHP_EOL;
+        }
+    }
+
+
 
     /**
      * Writes into {@link self::$package}, {@link self::$pearcmd} and {@link self::$pirum}.
