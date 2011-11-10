@@ -99,7 +99,7 @@ class Setup
     /**
      * @return string
      */
-    protected function getTempDir()
+    public function getTempDir()
     {
         $tmpFile = $this->getTempFile();
         return dirname($tmpFile);

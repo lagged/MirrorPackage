@@ -101,6 +101,8 @@ class MirrorPackage
             ->downloadPackage()
             ->extractPackage();
 
+        $tmpDir = $setup->getTempDir();
+
         $packageXML = new MirrorPackage\PackageXML("{$tmpDir}/package.xml");
 
         $pirum   = new MirrorPackage\PirumXML("{$this->pirum}/pirum.xml");
