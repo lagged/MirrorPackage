@@ -116,9 +116,11 @@ class MirrorPackage
 
         $deps = $packageXML->getDependencies();
 
+        /**
+         * @desc Overwrite extracted package.xml.
+         */
         if (@file_put_contents("{$tmpDir}/package.xml", (string) $packageXML) === false) {
-            echo "Could not write package.xml.";
-            exit(3);
+            throw new \RuntimeException("Could not write package.xml.");
         }
 
         /**
