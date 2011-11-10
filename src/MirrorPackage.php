@@ -125,17 +125,11 @@ class MirrorPackage
          * @desc Finally, we re-create the package - poor man's "pear package".
          */
         $release = new \Lagged\PEAR\MirrorPackage\Release($this->package, $tmpDir);
+        $release->run();
 
 
         \chdir($tmpDir);
-
-        //unlink($this->package);
-        $newName = substr(basename($this->package), 0, -4);
-        $cmd = "tar -czf {$newName}.tgz {$newName} package.xml";
-        var_dump($newName, $cmd); exit;
-        exec($cmd, $output, $ret);
-
-        //rename($packageFile, "{$this->pirum}/{$packageFile}");
+        rename($packageFile, "{$this->pirum}/{$packageFile}");
 
         return $this;
     }
