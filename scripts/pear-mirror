@@ -20,7 +20,6 @@ $config["p:"]  = "The URL to your package";
 $config["c::"] = "Location of the pear command on your system"; // -c, optional
 $config["h::"] = "Display help message"; // -h, optional
 
-//var_dump(array_keys
 $opts = getopt(implode('', array_keys($config)));
 
 set_include_path(dirname(__DIR__) . '/src:' . get_include_path());
