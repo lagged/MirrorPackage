@@ -103,6 +103,10 @@ class MirrorPackage
 
         $tmpDir = $setup->getTempDir();
 
+
+        /**
+         * @desc Once the setup is done, we replace the current channel in the package.xml.
+         */
         $packageXML = new MirrorPackage\PackageXML("{$tmpDir}/package.xml");
 
         $pirum   = new MirrorPackage\PirumXML("{$this->pirum}/pirum.xml");
@@ -117,14 +121,21 @@ class MirrorPackage
             exit(3);
         }
 
-        $gzip = 'gzip'; // FIXME: detect this?
+        /**
+         * @desc Finally, we re-create the package - poor man's "pear package".
+         */
+        $release = new \Lagged\PEAR\MirrorPackage\Release($this->package, $tmpDir);
 
-        // replace package.xml in .tar
-        $cmd = "{$tar} -cf {$packageFile} {$packageFile}";
-        $cmd = "{$gzip} {$packageFile}";
+
+        \chdir($tmpDir);
+
+        //unlink($this->package);
+        $newName = substr(basename($this->package), 0, -4);
+        $cmd = "tar -czf {$newName}.tgz {$newName} package.xml";
+        var_dump($newName, $cmd); exit;
         exec($cmd, $output, $ret);
 
-        rename($packageFile, "{$this->pirum}/{$packageFile}");
+        //rename($packageFile, "{$this->pirum}/{$packageFile}");
 
         return $this;
     }
