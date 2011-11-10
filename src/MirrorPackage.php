@@ -164,6 +164,14 @@ class MirrorPackage
 
         $pirum   = new MirrorPackage\PirumXML("{$this->pirum}/pirum.xml");
         $channel = $pirum->getChannelUrl();
+        if ($channel == '__uri') {
+            throw new \LogicException("This package is not hosted on a specific channel.");
+        }
+        if (substr($channel, 0, 7) == 'http://') {
+            $channel = substr($channel, 7);
+        } elseif (substr($channel, 0, 8) == 'https://') {
+            $channel = substr($channel, 8);
+        }
 
         $packageXML->setChannel($channel);
 
