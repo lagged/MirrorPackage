@@ -94,34 +94,12 @@ class MirrorPackage
     public function clonePackage()
     {
         $packageFile = basename($this->package);
-        $tmpFile     = sys_get_temp_dir() . '/pear-mirror/' . $packageFile;
 
-        $tmpDir = dirname($tmpFile);
-        if (!file_exists($tmpDir)) {
-            if (!mkdir($tmpDir)) {
-                echo "Could not create temporary directory: {$tmpDir}" . PHP_EOL;
-                exit(3);
-            }
-        }
-
-        if (!file_exists($tmpFile)) {
-            if (!file_put_contents($tmpFile, file_get_contents($this->package))) {
-                echo "Could not download package..." . PHP_EOL;
-                exit(3);
-            }
-        }
-
-        if (file_exists("{$this->pirum}/{$packageFile}")) {
-            echo "Package seems to already exist in pirum's directory." . PHP_EOL;
-            exit(3);
-        }
-
-        $tar = "tar"; // FIXME: maybe 'detect' this which which or whereis?
-
-        \chdir($tmpDir);
-
-        $cmd = "{$tar} zxf {$tmpFile}";
-        exec($cmd, $output, $ret);
+        $setup = new \Lagged\PEAR\MirrorPackage\Setup($this->package, $this->pirum);
+        $setup->checkPirum()
+            ->createDirectories()
+            ->downloadPackage()
+            ->extractPackage();
 
         $packageXML = new MirrorPackage\PackageXML("{$tmpDir}/package.xml");
 
