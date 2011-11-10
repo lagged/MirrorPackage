@@ -27,5 +27,16 @@ set_include_path(dirname(__DIR__) . '/src:' . get_include_path());
 require_once 'MirrorPackage.php';
 spl_autoload_register(array('Lagged\PEAR\MirrorPackage', 'autoload'));
 
-$p = new \Lagged\PEAR\MirrorPackage($opts, $_SERVER, $config);
-$p->setUp()->clonePackage()->showSummary();
+try {
+    $p = new \Lagged\PEAR\MirrorPackage($opts, $_SERVER, $config);
+    $p->setUp()->clonePackage()->showSummary();
+} catch (\LogicException $e) {
+    echo "User error: {$e->getMessage()}" . PHP_EOL;
+    exit(2);
+} catch (\RuntimeError $e) {
+    echo "Runtime error: {$e->getMessage()}" . PHP_EOL;
+    exit(3);
+} catch (\Exception $e) {
+    echo "Unknown error: {$e->getMessage()}" . PHP_EOL;
+    exit(4);
+}
